@@ -99,7 +99,7 @@ m <- leaflet(sp.lines.df) %>%
   fitBounds(sp.lines.df@bbox[1,1], sp.lines.df@bbox[2,1], sp.lines.df@bbox[1,2], sp.lines.df@bbox[2,2])
 m
 library(shiny)
-runGitHub("dust", "serereuk")
+
 #User interface (UI) settings
 ui <- fluidPage(leafletOutput("m.dynamic"),
                 absolutePanel(top = 10,
