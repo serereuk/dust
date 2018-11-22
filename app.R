@@ -105,7 +105,6 @@ ui <- fluidPage(leafletOutput("m.dynamic"),
                                           min = min(sp.lines.df@data$d),
                                           max = max(sp.lines.df@data$d),
                                           value = min(sp.lines.df@data$d),
-                                          step = 3600,
                                           animate=TRUE)))
 
 #Name @coords slot of SpatialLinesDataFrame: 'lng' and 'lat'
