@@ -1,5 +1,5 @@
 ---
-  title: "ex1"
+title: "ex1"
 output: html_document
 runtime: shiny
 ---
