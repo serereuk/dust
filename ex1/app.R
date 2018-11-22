@@ -4,6 +4,7 @@ output: html_document
 runtime: shiny
 ---
 
+library(shiny)
 library(leaflet)
 library(dplyr)
 library(data.table)
@@ -137,4 +138,5 @@ server <- function(input, output){
 }
 
 # Complete app with UI and server components
-shinyApp(ui, server)
+shinyApp(ui = ui, server = server)
+
