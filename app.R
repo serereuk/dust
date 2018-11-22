@@ -1,8 +1,3 @@
----
-title: "ex1"
-output: html_document
-runtime: shiny
----
 
 library(shiny)
 library(leaflet)
