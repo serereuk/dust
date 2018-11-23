@@ -87,7 +87,7 @@ labels <- paste0("ID: ",sp.lines.df@data$id,
 pal <- colorNumeric(palette = colorRampPalette(c("red", "blue"))(5),
                     domain = 0:max(sp.lines.df@data$풍속.m.s.))
 
-#Create object fo class 'leaflet' 'htmlwidget'
+#Create object fo class 'leaflet' 'htmlwidget'37.8831	126.7665
 m <- leaflet(sp.lines.df) %>%
   addTiles()  %>% addProviderTiles(providers$Esri.OceanBasemap)  %>% # add default OpenStreetMap map tiles
   addPolylines(color = ~pal(풍속.m.s.), opacity=1, weigh = 3, popup = labels) %>%
@@ -95,7 +95,6 @@ m <- leaflet(sp.lines.df) %>%
             title = "Wind speed <br> (km/h)",
             opacity = 1) %>%
   fitBounds(sp.lines.df@bbox[1,1], sp.lines.df@bbox[2,1], sp.lines.df@bbox[1,2], sp.lines.df@bbox[2,2])
-
 
 #User interface (UI) settings
 ui <- fluidPage(leafletOutput("m.dynamic"),
