@@ -1,12 +1,18 @@
 
 library(shiny)
+if (!require(leaflet)) install.packages("leaflet")
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(data.table)) install.packages("data.table")
+if (!require(circular)) install.packages("circular")
+#if (!require(sp)) install.packages("sp")
+
 library(leaflet)
 library(dplyr)
 library(data.table)
-ds <- fread("ex2016.txt", data.table = F)
 library(circular)
-library(dplyr)
 library(timeDate)
+library(sp)
+ds <- fread("ex2016.txt", data.table = F)
 ds$d <- as.timeDate(substr(ds$d,1,10), zone = "")@Data
 ds$w.direction <- circular(ds$`풍향(deg)`, type = "angles", units = "degree",template = "geographics")
 ds <- ds %>% mutate(start.x = 125.5596, start.y = 36.6254, id = 1:nrow(ds))
@@ -45,15 +51,12 @@ for (i in c(1:nrow(ds))){
 end.xy <- end.xy.df[-1,]
 ds <- data.frame(ds,end.xy)
 
-library(sp)
+
 lines <- data.frame(cbind(lng=c(ds$start.x,ds$end.x,ds$end.arrow.x),
                           lat=c(ds$start.y,ds$end.y,ds$end.arrow.y),
                           id=c(rep(ds$id,3))))
 
 lines.list <- list()
-
-library(sp)
-
 for (i in c(1:max(lines$id))){
   line <- subset(lines,lines$id==i)
   line <- as.matrix(line[,c(1:2)])
@@ -92,19 +95,21 @@ m <- leaflet(sp.lines.df) %>%
             title = "Wind speed <br> (km/h)",
             opacity = 1) %>%
   fitBounds(sp.lines.df@bbox[1,1], sp.lines.df@bbox[2,1], sp.lines.df@bbox[1,2], sp.lines.df@bbox[2,2])
-m
-library(shiny)
+
 
 #User interface (UI) settings
 ui <- fluidPage(leafletOutput("m.dynamic"),
-                absolutePanel(top = 10,
-                              right = 10,
+                h1("서해 바람 방향 2016년 기준 저고도에서의 영향 확인"),
+                absolutePanel(top = 20,
+                              right = 20,
+                              height = "800px",
                               draggable = TRUE,
                               sliderInput("range",
                                           "Time of data collection:",
                                           min = min(sp.lines.df@data$d),
                                           max = max(sp.lines.df@data$d),
                                           value = min(sp.lines.df@data$d),
+                                          step = 3600,
                                           animate=TRUE)))
 
 #Name @coords slot of SpatialLinesDataFrame: 'lng' and 'lat'
@@ -121,7 +126,7 @@ server <- function(input, output){
   output$m.dynamic <- renderLeaflet({
     leaflet(sp.lines.df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
-      addLegend("bottomright",pal = pal, values = ~풍속.m.s., title = "Wind speed <br> (km/h)", opacity = 0.9) %>%
+      addLegend("bottomright",pal = pal, values = ~풍속.m.s., title = "Wind speed <br> (m/s)", opacity = 0.9) %>%
       fitBounds(sp.lines.df@bbox[1,1], sp.lines.df@bbox[2,1], sp.lines.df@bbox[1,2], sp.lines.df@bbox[2,2])
   })
   observe({
