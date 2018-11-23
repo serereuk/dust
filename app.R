@@ -106,10 +106,10 @@ ui <- fluidPage(leafletOutput("m.dynamic"),
                               draggable = TRUE,
                               sliderInput("range",
                                           "Time of data collection:",
-                                          min = min(sp.lines.df@data$d),
-                                          max = max(sp.lines.df@data$d),
-                                          value = min(sp.lines.df@data$d),
-                                          step = 3600,
+                                          min = min(sp.lines.df@data$id),
+                                          max = max(sp.lines.df@data$id),
+                                          value = min(sp.lines.df@data$id),
+                                          step = 1,
                                           animate=TRUE)))
 
 #Name @coords slot of SpatialLinesDataFrame: 'lng' and 'lat'
@@ -121,7 +121,7 @@ for (i in c(1:max(sp.lines.df@data$id))) {
 #Server logic
 server <- function(input, output){
   filteredData <- reactive({
-    sp.lines.df[sp.lines.df@data$d == input$range[1],]
+    sp.lines.df[sp.lines.df@data$id == input$range[1],]
   })
   output$m.dynamic <- renderLeaflet({
     leaflet(sp.lines.df) %>%
